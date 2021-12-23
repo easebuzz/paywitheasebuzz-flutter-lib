@@ -1,5 +1,5 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.4 (swiftlang-1205.0.26.9 clang-1205.0.19.55)
+// swift-compiler-version: Apple Swift version 5.5.2 (swiftlang-1300.0.47.5 clang-1300.0.29.30)
 // swift-module-flags: -target i386-apple-ios10.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name Easebuzz
 import Darwin
 @_exported import Easebuzz
@@ -10,12 +10,13 @@ import Swift
 import SystemConfiguration
 import UIKit
 import WebKit
+import _Concurrency
 final public class SHA1 {
   public init()
   final public func calculate(for bytes: Swift.Array<Swift.UInt8>) -> Swift.Array<Swift.UInt8>
   @objc deinit
 }
-extension SHA1 : Easebuzz.Updatable {
+extension Easebuzz.SHA1 : Easebuzz.Updatable {
   @discardableResult
   final public func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool = false) throws -> Swift.Array<Swift.UInt8>
 }
@@ -51,11 +52,11 @@ extension SHA1 : Easebuzz.Updatable {
   }
   @objc deinit
 }
-extension CardValidator.CardType {
+extension Easebuzz.CardValidator.CardType {
   public func stringValue() -> Swift.String
   public init?(string: Swift.String)
 }
-extension String {
+extension Swift.String {
   public func isValidCardNumber() -> Swift.Bool
   public func cardType() -> Easebuzz.CardValidator.CardType?
   public func validLength() -> Swift.Int
@@ -74,7 +75,7 @@ extension String {
   }
   public func validDate() -> Swift.Bool
 }
-extension NSMutableURLRequest {
+extension Foundation.NSMutableURLRequest {
   public func setBodyContent(parameters: [Swift.String : Any])
 }
 @_inheritsConvenienceInitializers @objc public class StaticDataModel : ObjectiveC.NSObject {
@@ -103,21 +104,20 @@ final public class Scrypt {
   final public func calculate() throws -> [Swift.UInt8]
   @objc deinit
 }
-@objc public class Spinner : UIKit.UIVisualEffectView {
-  public init(text: Swift.String)
-  public func setText(text: Swift.String)
-  @objc required dynamic public init?(coder aDecoder: Foundation.NSCoder)
-  @objc override dynamic public func didMoveToSuperview()
-  public func show()
-  public func hide()
-  @objc override dynamic public init(effect: UIKit.UIVisualEffect?)
+@objc @_Concurrency.MainActor(unsafe) public class Spinner : UIKit.UIVisualEffectView {
+  @_Concurrency.MainActor(unsafe) public init(text: Swift.String)
+  @_Concurrency.MainActor(unsafe) public func setText(text: Swift.String)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder aDecoder: Foundation.NSCoder)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func didMoveToSuperview()
+  @_Concurrency.MainActor(unsafe) public func show()
+  @_Concurrency.MainActor(unsafe) public func hide()
   @objc deinit
 }
 public protocol AEAD {
   static var kLen: Swift.Int { get }
   static var ivRange: Swift.Range<Swift.Int> { get }
 }
-extension FixedWidthInteger {
+extension Swift.FixedWidthInteger {
   @inlinable internal func bytes(totalBytes: Swift.Int = MemoryLayout<Self>.size) -> Swift.Array<Swift.UInt8> {
     arrayOfBytes(value: self.littleEndian, length: totalBytes)
     // TODO: adjust bytes order
@@ -150,7 +150,7 @@ public enum SwiftyJSONError : Swift.Int, Swift.Error {
     get
   }
 }
-extension SwiftyJSONError : Foundation.CustomNSError {
+extension Easebuzz.SwiftyJSONError : Foundation.CustomNSError {
   public static var errorDomain: Swift.String {
     get
   }
@@ -210,7 +210,7 @@ public enum Index<T> : Swift.Comparable {
 }
 public typealias JSONIndex = Easebuzz.Index<Easebuzz.JSON>
 public typealias JSONRawIndex = Easebuzz.Index<Any>
-extension JSON : Swift.Collection {
+extension Easebuzz.JSON : Swift.Collection {
   public typealias Index = Easebuzz.JSONRawIndex
   public var startIndex: Easebuzz.JSON.Index {
     get
@@ -234,17 +234,17 @@ public enum JSONKey {
 public protocol JSONSubscriptType {
   var jsonKey: Easebuzz.JSONKey { get }
 }
-extension Int : Easebuzz.JSONSubscriptType {
+extension Swift.Int : Easebuzz.JSONSubscriptType {
   public var jsonKey: Easebuzz.JSONKey {
     get
   }
 }
-extension String : Easebuzz.JSONSubscriptType {
+extension Swift.String : Easebuzz.JSONSubscriptType {
   public var jsonKey: Easebuzz.JSONKey {
     get
   }
 }
-extension JSON {
+extension Easebuzz.JSON {
   public subscript(path: [Easebuzz.JSONSubscriptType]) -> Easebuzz.JSON {
     get
     set
@@ -254,7 +254,7 @@ extension JSON {
     set
   }
 }
-extension JSON : Swift.ExpressibleByStringLiteral {
+extension Easebuzz.JSON : Swift.ExpressibleByStringLiteral {
   public init(stringLiteral value: Swift.StringLiteralType)
   public init(extendedGraphemeClusterLiteral value: Easebuzz.JSON.StringLiteralType)
   public init(unicodeScalarLiteral value: Easebuzz.JSON.StringLiteralType)
@@ -262,32 +262,32 @@ extension JSON : Swift.ExpressibleByStringLiteral {
   public typealias StringLiteralType = Swift.StringLiteralType
   public typealias UnicodeScalarLiteralType = Easebuzz.JSON.StringLiteralType
 }
-extension JSON : Swift.ExpressibleByIntegerLiteral {
+extension Easebuzz.JSON : Swift.ExpressibleByIntegerLiteral {
   public init(integerLiteral value: Swift.IntegerLiteralType)
   public typealias IntegerLiteralType = Swift.IntegerLiteralType
 }
-extension JSON : Swift.ExpressibleByBooleanLiteral {
+extension Easebuzz.JSON : Swift.ExpressibleByBooleanLiteral {
   public init(booleanLiteral value: Swift.BooleanLiteralType)
   public typealias BooleanLiteralType = Swift.BooleanLiteralType
 }
-extension JSON : Swift.ExpressibleByFloatLiteral {
+extension Easebuzz.JSON : Swift.ExpressibleByFloatLiteral {
   public init(floatLiteral value: Swift.FloatLiteralType)
   public typealias FloatLiteralType = Swift.FloatLiteralType
 }
-extension JSON : Swift.ExpressibleByDictionaryLiteral {
+extension Easebuzz.JSON : Swift.ExpressibleByDictionaryLiteral {
   public init(dictionaryLiteral elements: (Swift.String, Any)...)
   public typealias Key = Swift.String
   public typealias Value = Any
 }
-extension JSON : Swift.ExpressibleByArrayLiteral {
+extension Easebuzz.JSON : Swift.ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Any...)
   public typealias ArrayLiteralElement = Any
 }
-extension JSON : Swift.ExpressibleByNilLiteral {
+extension Easebuzz.JSON : Swift.ExpressibleByNilLiteral {
   @available(*, deprecated, message: "use JSON.null instead. Will be removed in future versions")
   public init(nilLiteral: ())
 }
-extension JSON : Swift.RawRepresentable {
+extension Easebuzz.JSON : Swift.RawRepresentable {
   public init?(rawValue: Any)
   public var rawValue: Any {
     get
@@ -297,7 +297,7 @@ extension JSON : Swift.RawRepresentable {
   public func rawString(_ options: [Easebuzz.writingOptionsKeys : Any]) -> Swift.String?
   public typealias RawValue = Any
 }
-extension JSON : Swift.CustomStringConvertible, Swift.CustomDebugStringConvertible {
+extension Easebuzz.JSON : Swift.CustomStringConvertible, Swift.CustomDebugStringConvertible {
   public var description: Swift.String {
     get
   }
@@ -305,7 +305,7 @@ extension JSON : Swift.CustomStringConvertible, Swift.CustomDebugStringConvertib
     get
   }
 }
-extension JSON {
+extension Easebuzz.JSON {
   public var array: [Easebuzz.JSON]? {
     get
   }
@@ -317,7 +317,7 @@ extension JSON {
     set
   }
 }
-extension JSON {
+extension Easebuzz.JSON {
   public var dictionary: [Swift.String : Easebuzz.JSON]? {
     get
   }
@@ -329,7 +329,7 @@ extension JSON {
     set
   }
 }
-extension JSON {
+extension Easebuzz.JSON {
   public var bool: Swift.Bool? {
     get
     set
@@ -339,7 +339,7 @@ extension JSON {
     set
   }
 }
-extension JSON {
+extension Easebuzz.JSON {
   public var string: Swift.String? {
     get
     set
@@ -349,7 +349,7 @@ extension JSON {
     set
   }
 }
-extension JSON {
+extension Easebuzz.JSON {
   public var number: Foundation.NSNumber? {
     get
     set
@@ -359,20 +359,20 @@ extension JSON {
     set
   }
 }
-extension JSON {
+extension Easebuzz.JSON {
   public var null: Foundation.NSNull? {
     get
     set
   }
   public func exists() -> Swift.Bool
 }
-extension JSON {
+extension Easebuzz.JSON {
   public var url: Foundation.URL? {
     get
     set
   }
 }
-extension JSON {
+extension Easebuzz.JSON {
   public var double: Swift.Double? {
     get
     set
@@ -470,7 +470,7 @@ extension JSON {
     set
   }
 }
-extension JSON : Swift.Comparable {
+extension Easebuzz.JSON : Swift.Comparable {
 }
 public func == (lhs: Easebuzz.JSON, rhs: Easebuzz.JSON) -> Swift.Bool
 public func <= (lhs: Easebuzz.JSON, rhs: Easebuzz.JSON) -> Swift.Bool
@@ -488,10 +488,10 @@ public enum writingOptionsKeys {
     get
   }
 }
-extension AES {
+extension Easebuzz.AES {
   convenience public init(key: Swift.String, iv: Swift.String, padding: Easebuzz.Padding = .pkcs7) throws
 }
-public typealias CipherOperationOnBlock = (Swift.ArraySlice<Swift.UInt8>) -> Swift.Array<Swift.UInt8>?
+public typealias CipherOperationOnBlock = (_ block: Swift.ArraySlice<Swift.UInt8>) -> Swift.Array<Swift.UInt8>?
 public protocol BlockMode {
   var options: Easebuzz.BlockModeOption { get }
   func worker(blockSize: Swift.Int, cipherOperation: @escaping Easebuzz.CipherOperationOnBlock) throws -> Easebuzz.CipherModeWorker
@@ -509,85 +509,85 @@ public struct CTR {
   public init(iv: Swift.Array<Swift.UInt8>, counter: Swift.Int = 0)
   public func worker(blockSize: Swift.Int, cipherOperation: @escaping Easebuzz.CipherOperationOnBlock) throws -> Easebuzz.CipherModeWorker
 }
-extension Array where Element == Swift.UInt8 {
+extension Swift.Array where Element == Swift.UInt8 {
   public func toBase64() -> Swift.String?
   public init(base64: Swift.String)
 }
-@_inheritsConvenienceInitializers @objc(EBZDropDown) open class EBZDropDown : UIKit.UITextField {
-  public var selectedIndex: Swift.Int?
-  @objc @IBInspectable public var rowHeight: CoreGraphics.CGFloat
-  @objc @IBInspectable public var rowBackgroundColor: UIKit.UIColor
-  @objc @IBInspectable public var selectedRowColor: UIKit.UIColor
-  @objc @IBInspectable public var hideOptionsWhenSelect: Swift.Bool
-  @objc @IBInspectable public var isSearchEnable: Swift.Bool {
+@_inheritsConvenienceInitializers @objc(EBZDropDown) @_Concurrency.MainActor(unsafe) open class EBZDropDown : UIKit.UITextField {
+  @_Concurrency.MainActor(unsafe) public var selectedIndex: Swift.Int?
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var rowHeight: CoreGraphics.CGFloat
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var rowBackgroundColor: UIKit.UIColor
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var selectedRowColor: UIKit.UIColor
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var hideOptionsWhenSelect: Swift.Bool
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var isSearchEnable: Swift.Bool {
     @objc get
     @objc set
   }
-  @objc @IBInspectable public var borderColor: UIKit.UIColor {
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var borderColor: UIKit.UIColor {
     @objc get
     @objc set
   }
-  @objc @IBInspectable public var listHeight: CoreGraphics.CGFloat {
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var listHeight: CoreGraphics.CGFloat {
     @objc get
     @objc set
   }
-  @objc @IBInspectable public var borderWidth: CoreGraphics.CGFloat {
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var borderWidth: CoreGraphics.CGFloat {
     @objc get
     @objc set
   }
-  @objc @IBInspectable public var cornerRadius: CoreGraphics.CGFloat {
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var cornerRadius: CoreGraphics.CGFloat {
     @objc get
     @objc set
   }
-  public var optionArray: [Swift.String] {
+  @_Concurrency.MainActor(unsafe) public var optionArray: [Swift.String] {
     get
     set
   }
-  public var optionImageArray: [Swift.String] {
+  @_Concurrency.MainActor(unsafe) public var optionImageArray: [Swift.String] {
     get
     set
   }
-  public var optionIds: [Swift.Int]?
-  @objc @IBInspectable public var arrowSize: CoreGraphics.CGFloat {
+  @_Concurrency.MainActor(unsafe) public var optionIds: [Swift.Int]?
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var arrowSize: CoreGraphics.CGFloat {
     @objc get
     @objc set
   }
-  @objc @IBInspectable public var arrowColor: UIKit.UIColor {
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var arrowColor: UIKit.UIColor {
     @objc get
     @objc set
   }
-  @objc @IBInspectable public var checkMarkEnabled: Swift.Bool {
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var checkMarkEnabled: Swift.Bool {
     @objc get
     @objc set
   }
-  @objc @IBInspectable public var handleKeyboard: Swift.Bool {
+  @objc @IBInspectable @_Concurrency.MainActor(unsafe) public var handleKeyboard: Swift.Bool {
     @objc get
     @objc set
   }
-  @objc override dynamic public init(frame: CoreGraphics.CGRect)
-  @objc required dynamic public init(coder aDecoder: Foundation.NSCoder)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(frame: CoreGraphics.CGRect)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init(coder aDecoder: Foundation.NSCoder)
   @objc deinit
-  public func showList()
-  public func hideList()
-  @objc public func touchAction()
-  public func didSelect(completion: @escaping (Swift.String, Swift.Int, Swift.Int) -> ())
-  public func listWillAppear(completion: @escaping () -> ())
-  public func listDidAppear(completion: @escaping () -> ())
-  public func listWillDisappear(completion: @escaping () -> ())
-  public func listDidDisappear(completion: @escaping () -> ())
+  @_Concurrency.MainActor(unsafe) public func showList()
+  @_Concurrency.MainActor(unsafe) public func hideList()
+  @objc @_Concurrency.MainActor(unsafe) public func touchAction()
+  @_Concurrency.MainActor(unsafe) public func didSelect(completion: @escaping (_ selectedText: Swift.String, _ index: Swift.Int, _ id: Swift.Int) -> ())
+  @_Concurrency.MainActor(unsafe) public func listWillAppear(completion: @escaping () -> ())
+  @_Concurrency.MainActor(unsafe) public func listDidAppear(completion: @escaping () -> ())
+  @_Concurrency.MainActor(unsafe) public func listWillDisappear(completion: @escaping () -> ())
+  @_Concurrency.MainActor(unsafe) public func listDidDisappear(completion: @escaping () -> ())
 }
-extension EBZDropDown : UIKit.UITextFieldDelegate {
-  @objc dynamic public func textFieldShouldReturn(_ textField: UIKit.UITextField) -> Swift.Bool
-  @objc dynamic public func textFieldDidBeginEditing(_ textField: UIKit.UITextField)
-  @objc dynamic public func textFieldShouldBeginEditing(_ textField: UIKit.UITextField) -> Swift.Bool
-  @objc dynamic public func textField(_ textField: UIKit.UITextField, shouldChangeCharactersIn range: Foundation.NSRange, replacementString string: Swift.String) -> Swift.Bool
+extension Easebuzz.EBZDropDown : UIKit.UITextFieldDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func textFieldShouldReturn(_ textField: UIKit.UITextField) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func textFieldDidBeginEditing(_ textField: UIKit.UITextField)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func textFieldShouldBeginEditing(_ textField: UIKit.UITextField) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func textField(_ textField: UIKit.UITextField, shouldChangeCharactersIn range: Foundation.NSRange, replacementString string: Swift.String) -> Swift.Bool
 }
-extension EBZDropDown : UIKit.UITableViewDataSource {
-  @objc dynamic public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
-  @objc dynamic public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+extension Easebuzz.EBZDropDown : UIKit.UITableViewDataSource {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
 }
-extension EBZDropDown : UIKit.UITableViewDelegate {
-  @objc dynamic public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
+extension Easebuzz.EBZDropDown : UIKit.UITableViewDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
 }
 public struct PCBC : Easebuzz.BlockMode {
   public enum Error : Swift.Error {
@@ -624,7 +624,7 @@ public enum PKCS5 {
   public static func enableLog(enable: Swift.Bool)
   @objc deinit
 }
-extension AES : Easebuzz.Cryptors {
+extension Easebuzz.AES : Easebuzz.Cryptors {
   final public func makeEncryptor() throws -> Easebuzz.Cryptor & Easebuzz.Updatable
   final public func makeDecryptor() throws -> Easebuzz.Cryptor & Easebuzz.Updatable
 }
@@ -656,23 +656,23 @@ final public class ChaCha20 {
   public init(key: Swift.Array<Swift.UInt8>, iv nonce: Swift.Array<Swift.UInt8>) throws
   @objc deinit
 }
-extension ChaCha20 : Easebuzz.Cipher {
+extension Easebuzz.ChaCha20 : Easebuzz.Cipher {
   final public func encrypt(_ bytes: Swift.ArraySlice<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
   final public func decrypt(_ bytes: Swift.ArraySlice<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
 }
-extension ChaCha20 {
+extension Easebuzz.ChaCha20 {
   public struct ChaChaEncryptor : Easebuzz.Cryptor, Easebuzz.Updatable {
     public mutating func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool = false) throws -> Swift.Array<Swift.UInt8>
     public func seek(to: Swift.Int) throws
   }
 }
-extension ChaCha20 {
+extension Easebuzz.ChaCha20 {
   public struct ChaChaDecryptor : Easebuzz.Cryptor, Easebuzz.Updatable {
     public mutating func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool = true) throws -> Swift.Array<Swift.UInt8>
     public func seek(to: Swift.Int) throws
   }
 }
-extension ChaCha20 : Easebuzz.Cryptors {
+extension Easebuzz.ChaCha20 : Easebuzz.Cryptors {
   final public func makeEncryptor() -> Easebuzz.Cryptor & Easebuzz.Updatable
   final public func makeDecryptor() -> Easebuzz.Cryptor & Easebuzz.Updatable
 }
@@ -715,11 +715,11 @@ final public class AES {
   public init(key: Swift.Array<Swift.UInt8>, blockMode: Easebuzz.BlockMode, padding: Easebuzz.Padding = .pkcs7) throws
   @objc deinit
 }
-extension AES : Easebuzz.Cipher {
+extension Easebuzz.AES : Easebuzz.Cipher {
   final public func encrypt(_ bytes: Swift.ArraySlice<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
   final public func decrypt(_ bytes: Swift.ArraySlice<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
 }
-extension String {
+extension Swift.String {
   public var bytes: Swift.Array<Swift.UInt8> {
     get
   }
@@ -740,7 +740,7 @@ extension String {
 @_hasMissingDesignatedInitializers final public class Checksum {
   @objc deinit
 }
-extension Checksum {
+extension Easebuzz.Checksum {
   public static func crc32(_ message: Swift.Array<Swift.UInt8>, seed: Swift.UInt32? = nil, reflect: Swift.Bool = true) -> Swift.UInt32
   public static func crc32c(_ message: Swift.Array<Swift.UInt8>, seed: Swift.UInt32? = nil, reflect: Swift.Bool = true) -> Swift.UInt32
   public static func crc16(_ message: Swift.Array<Swift.UInt8>, seed: Swift.UInt16? = nil) -> Swift.UInt16
@@ -778,21 +778,21 @@ final public class SHA3 {
   final public func calculate(for bytes: Swift.Array<Swift.UInt8>) -> Swift.Array<Swift.UInt8>
   @objc deinit
 }
-extension SHA3 : Easebuzz.Updatable {
+extension Easebuzz.SHA3 : Easebuzz.Updatable {
   final public func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool = false) throws -> Swift.Array<Swift.UInt8>
 }
-extension String {
+extension Swift.String {
   public func decryptBase64ToString(cipher: Easebuzz.Cipher) throws -> Swift.String
   public func decryptBase64(cipher: Easebuzz.Cipher) throws -> Swift.Array<Swift.UInt8>
 }
-extension HMAC {
+extension Easebuzz.HMAC {
   convenience public init(key: Swift.String, variant: Easebuzz.HMAC.Variant = .md5) throws
 }
 public protocol _UInt8Type {
 }
-extension UInt8 : Easebuzz._UInt8Type {
+extension Swift.UInt8 : Easebuzz._UInt8Type {
 }
-extension UInt8 {
+extension Swift.UInt8 {
   public func bits() -> [Easebuzz.Bit]
   public func bits() -> Swift.String
 }
@@ -801,7 +801,7 @@ public protocol Cryptors : AnyObject {
   func makeDecryptor() throws -> Easebuzz.Cryptor & Easebuzz.Updatable
   static func randomIV(_ blockSize: Swift.Int) -> Swift.Array<Swift.UInt8>
 }
-extension Cryptors {
+extension Easebuzz.Cryptors {
   public static func randomIV(_ blockSize: Swift.Int) -> Swift.Array<Swift.UInt8>
 }
 final public class GCM : Easebuzz.BlockMode {
@@ -830,16 +830,16 @@ final public class GCM : Easebuzz.BlockMode {
   final public func worker(blockSize: Swift.Int, cipherOperation: @escaping Easebuzz.CipherOperationOnBlock) throws -> Easebuzz.CipherModeWorker
   @objc deinit
 }
-extension UINavigationController {
-  @objc override dynamic open var supportedInterfaceOrientations: UIKit.UIInterfaceOrientationMask {
-    @objc get
+extension UIKit.UINavigationController {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open var supportedInterfaceOrientations: UIKit.UIInterfaceOrientationMask {
+    @_Concurrency.MainActor(unsafe) @objc get
   }
-  @objc override dynamic open var shouldAutorotate: Swift.Bool {
-    @objc get
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open var shouldAutorotate: Swift.Bool {
+    @_Concurrency.MainActor(unsafe) @objc get
   }
 }
-extension UIViewController {
-  @objc override dynamic open func touchesBegan(_ touches: Swift.Set<UIKit.UITouch>, with event: UIKit.UIEvent?)
+extension UIKit.UIViewController {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func touchesBegan(_ touches: Swift.Set<UIKit.UITouch>, with event: UIKit.UIEvent?)
 }
 @objc public protocol PayWithEasebuzzCallback : ObjectiveC.NSObjectProtocol {
   @objc func PEBCallback(data: [Swift.String : Swift.AnyObject])
@@ -880,7 +880,7 @@ public protocol Cipher : AnyObject {
   func decrypt(_ bytes: Swift.ArraySlice<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
   func decrypt(_ bytes: Swift.Array<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
 }
-extension Cipher {
+extension Easebuzz.Cipher {
   public func encrypt(_ bytes: Swift.Array<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
   public func decrypt(_ bytes: Swift.Array<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
 }
@@ -903,11 +903,11 @@ final public class Rabbit {
   public init(key: Swift.Array<Swift.UInt8>, iv: Swift.Array<Swift.UInt8>?) throws
   @objc deinit
 }
-extension Rabbit : Easebuzz.Cipher {
+extension Easebuzz.Rabbit : Easebuzz.Cipher {
   final public func encrypt(_ bytes: Swift.ArraySlice<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
   final public func decrypt(_ bytes: Swift.ArraySlice<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
 }
-extension Data {
+extension Foundation.Data {
   public func checksum() -> Swift.UInt16
   public func md5() -> Foundation.Data
   public func sha1() -> Foundation.Data
@@ -923,24 +923,24 @@ extension Data {
   public func decrypt(cipher: Easebuzz.Cipher) throws -> Foundation.Data
   public func authenticate(with authenticator: Easebuzz.Authenticator) throws -> Foundation.Data
 }
-extension Data {
+extension Foundation.Data {
   public init(hex: Swift.String)
   public var bytes: Swift.Array<Swift.UInt8> {
     get
   }
   public func toHexString() -> Swift.String
 }
-@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class MonthYearPickerView : UIKit.UIPickerView, UIKit.UIPickerViewDelegate, UIKit.UIPickerViewDataSource {
-  public var onDateSelected: ((Swift.Int, Swift.Int) -> Swift.Void)?
-  @objc required dynamic public init?(coder aDecoder: Foundation.NSCoder)
-  @objc public func numberOfComponents(in pickerView: UIKit.UIPickerView) -> Swift.Int
-  @objc public func pickerView(_ pickerView: UIKit.UIPickerView, titleForRow row: Swift.Int, forComponent component: Swift.Int) -> Swift.String?
-  @objc public func pickerView(_ pickerView: UIKit.UIPickerView, numberOfRowsInComponent component: Swift.Int) -> Swift.Int
-  @objc public func pickerView(_ pickerView: UIKit.UIPickerView, didSelectRow row: Swift.Int, inComponent component: Swift.Int)
-  @objc public func pickerView(_ pickerView: UIKit.UIPickerView, attributedTitleForRow row: Swift.Int, forComponent component: Swift.Int) -> Foundation.NSAttributedString?
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class MonthYearPickerView : UIKit.UIPickerView, UIKit.UIPickerViewDelegate, UIKit.UIPickerViewDataSource {
+  @_Concurrency.MainActor(unsafe) public var onDateSelected: ((_ month: Swift.Int, _ year: Swift.Int) -> Swift.Void)?
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder aDecoder: Foundation.NSCoder)
+  @_Concurrency.MainActor(unsafe) @objc public func numberOfComponents(in pickerView: UIKit.UIPickerView) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func pickerView(_ pickerView: UIKit.UIPickerView, titleForRow row: Swift.Int, forComponent component: Swift.Int) -> Swift.String?
+  @_Concurrency.MainActor(unsafe) @objc public func pickerView(_ pickerView: UIKit.UIPickerView, numberOfRowsInComponent component: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func pickerView(_ pickerView: UIKit.UIPickerView, didSelectRow row: Swift.Int, inComponent component: Swift.Int)
+  @_Concurrency.MainActor(unsafe) @objc public func pickerView(_ pickerView: UIKit.UIPickerView, attributedTitleForRow row: Swift.Int, forComponent component: Swift.Int) -> Foundation.NSAttributedString?
   @objc deinit
 }
-extension Blowfish {
+extension Easebuzz.Blowfish {
   convenience public init(key: Swift.String, iv: Swift.String, padding: Easebuzz.Padding = .pkcs7) throws
 }
 @_hasMissingDesignatedInitializers public class BlockDecryptor : Easebuzz.Cryptor, Easebuzz.Updatable {
@@ -948,7 +948,7 @@ extension Blowfish {
   public func seek(to position: Swift.Int) throws
   @objc deinit
 }
-extension PKCS5 {
+extension Easebuzz.PKCS5 {
   public struct PBKDF2 {
     public enum Error : Swift.Error {
       case invalidInput
@@ -980,7 +980,7 @@ public struct CCM {
   public init(iv: Swift.Array<Swift.UInt8>, tagLength: Swift.Int, messageLength: Swift.Int, authenticationTag: Swift.Array<Swift.UInt8>, additionalAuthenticatedData: Swift.Array<Swift.UInt8>? = nil)
   public func worker(blockSize: Swift.Int, cipherOperation: @escaping Easebuzz.CipherOperationOnBlock) throws -> Easebuzz.CipherModeWorker
 }
-extension PKCS5 {
+extension Easebuzz.PKCS5 {
   public struct PBKDF1 {
     public enum Error : Swift.Error {
       case invalidInput
@@ -1017,7 +1017,7 @@ extension PKCS5 {
   @objc override dynamic public init()
   @objc deinit
 }
-extension ChaCha20 {
+extension Easebuzz.ChaCha20 {
   convenience public init(key: Swift.String, iv: Swift.String) throws
 }
 final public class HMAC : Easebuzz.Authenticator {
@@ -1042,7 +1042,7 @@ final public class HMAC : Easebuzz.Authenticator {
   final public func authenticate(_ bytes: Swift.Array<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
   @objc deinit
 }
-extension Rabbit {
+extension Easebuzz.Rabbit {
   convenience public init(key: Swift.String) throws
   convenience public init(key: Swift.String, iv: Swift.String) throws
 }
@@ -1051,7 +1051,7 @@ final public class MD5 {
   final public func calculate(for bytes: Swift.Array<Swift.UInt8>) -> Swift.Array<Swift.UInt8>
   @objc deinit
 }
-extension MD5 : Easebuzz.Updatable {
+extension Easebuzz.MD5 : Easebuzz.Updatable {
   final public func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool = false) throws -> Swift.Array<Swift.UInt8>
 }
 @_hasMissingDesignatedInitializers final public class AEADChaCha20Poly1305 : Easebuzz.AEAD {
@@ -1117,7 +1117,7 @@ final public class Blowfish {
   public init(key: Swift.Array<Swift.UInt8>, blockMode: Easebuzz.BlockMode = CBC(iv: Array<UInt8>(repeating: 0, count: Blowfish.blockSize)), padding: Easebuzz.Padding) throws
   @objc deinit
 }
-extension Blowfish : Easebuzz.Cipher {
+extension Easebuzz.Blowfish : Easebuzz.Cipher {
   final public func encrypt<C>(_ bytes: C) throws -> Swift.Array<Swift.UInt8> where C : Swift.Collection, C.Element == Swift.UInt8, C.Index == Swift.Int
   final public func decrypt<C>(_ bytes: C) throws -> Swift.Array<Swift.UInt8> where C : Swift.Collection, C.Element == Swift.UInt8, C.Index == Swift.Int
 }
@@ -1157,17 +1157,17 @@ final public class SHA2 {
   final public func calculate(for bytes: Swift.Array<Swift.UInt8>) -> Swift.Array<Swift.UInt8>
   @objc deinit
 }
-extension SHA2 : Easebuzz.Updatable {
+extension Easebuzz.SHA2 : Easebuzz.Updatable {
   final public func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool = false) throws -> Swift.Array<Swift.UInt8>
 }
-extension Array {
+extension Swift.Array {
   public init(reserveCapacity: Swift.Int)
 }
-extension Array where Element == Swift.UInt8 {
+extension Swift.Array where Element == Swift.UInt8 {
   public init(hex: Swift.String)
   public func toHexString() -> Swift.String
 }
-extension Array where Element == Swift.UInt8 {
+extension Swift.Array where Element == Swift.UInt8 {
   @available(*, deprecated)
   public func chunks(size chunksize: Swift.Int) -> Swift.Array<Swift.Array<Element>>
   public func md5() -> [Element]
@@ -1185,7 +1185,7 @@ extension Array where Element == Swift.UInt8 {
   public func decrypt(cipher: Easebuzz.Cipher) throws -> [Element]
   public func authenticate<A>(with authenticator: A) throws -> [Element] where A : Easebuzz.Authenticator
 }
-extension UInt32 {
+extension Swift.UInt32 {
   @_specialize(exported: false, kind: full, where T == Swift.ArraySlice<Swift.UInt8>)
   @inlinable internal init<T>(bytes: T, fromIndex index: T.Index) where T : Swift.Collection, T.Element == Swift.UInt8, T.Index == Swift.Int {
     if bytes.isEmpty {
@@ -1203,19 +1203,19 @@ extension UInt32 {
     self = val0 | val1 | val2 | val3
   }
 }
-extension UIView {
-  public func makeToast(_ message: Swift.String?, duration: Foundation.TimeInterval = ToastManager.shared.duration, position: Easebuzz.ToastPosition = ToastManager.shared.position, title: Swift.String? = nil, image: UIKit.UIImage? = nil, style: Easebuzz.ToastStyle = ToastManager.shared.style, completion: ((Swift.Bool) -> Swift.Void)? = nil)
-  public func makeToast(_ message: Swift.String?, duration: Foundation.TimeInterval = ToastManager.shared.duration, point: CoreGraphics.CGPoint, title: Swift.String?, image: UIKit.UIImage?, style: Easebuzz.ToastStyle = ToastManager.shared.style, completion: ((Swift.Bool) -> Swift.Void)?)
-  public func showToast(_ toast: UIKit.UIView, duration: Foundation.TimeInterval = ToastManager.shared.duration, position: Easebuzz.ToastPosition = ToastManager.shared.position, completion: ((Swift.Bool) -> Swift.Void)? = nil)
-  public func showToast(_ toast: UIKit.UIView, duration: Foundation.TimeInterval = ToastManager.shared.duration, point: CoreGraphics.CGPoint, completion: ((Swift.Bool) -> Swift.Void)? = nil)
-  public func hideToast()
-  public func hideToast(_ toast: UIKit.UIView)
-  public func hideAllToasts(includeActivity: Swift.Bool = false, clearQueue: Swift.Bool = true)
-  public func clearToastQueue()
-  public func makeToastActivity(_ position: Easebuzz.ToastPosition)
-  public func makeToastActivity(_ point: CoreGraphics.CGPoint)
-  public func hideToastActivity()
-  public func toastViewForMessage(_ message: Swift.String?, title: Swift.String?, image: UIKit.UIImage?, style: Easebuzz.ToastStyle) throws -> UIKit.UIView
+extension UIKit.UIView {
+  @_Concurrency.MainActor(unsafe) public func makeToast(_ message: Swift.String?, duration: Foundation.TimeInterval = ToastManager.shared.duration, position: Easebuzz.ToastPosition = ToastManager.shared.position, title: Swift.String? = nil, image: UIKit.UIImage? = nil, style: Easebuzz.ToastStyle = ToastManager.shared.style, completion: ((_ didTap: Swift.Bool) -> Swift.Void)? = nil)
+  @_Concurrency.MainActor(unsafe) public func makeToast(_ message: Swift.String?, duration: Foundation.TimeInterval = ToastManager.shared.duration, point: CoreGraphics.CGPoint, title: Swift.String?, image: UIKit.UIImage?, style: Easebuzz.ToastStyle = ToastManager.shared.style, completion: ((_ didTap: Swift.Bool) -> Swift.Void)?)
+  @_Concurrency.MainActor(unsafe) public func showToast(_ toast: UIKit.UIView, duration: Foundation.TimeInterval = ToastManager.shared.duration, position: Easebuzz.ToastPosition = ToastManager.shared.position, completion: ((_ didTap: Swift.Bool) -> Swift.Void)? = nil)
+  @_Concurrency.MainActor(unsafe) public func showToast(_ toast: UIKit.UIView, duration: Foundation.TimeInterval = ToastManager.shared.duration, point: CoreGraphics.CGPoint, completion: ((_ didTap: Swift.Bool) -> Swift.Void)? = nil)
+  @_Concurrency.MainActor(unsafe) public func hideToast()
+  @_Concurrency.MainActor(unsafe) public func hideToast(_ toast: UIKit.UIView)
+  @_Concurrency.MainActor(unsafe) public func hideAllToasts(includeActivity: Swift.Bool = false, clearQueue: Swift.Bool = true)
+  @_Concurrency.MainActor(unsafe) public func clearToastQueue()
+  @_Concurrency.MainActor(unsafe) public func makeToastActivity(_ position: Easebuzz.ToastPosition)
+  @_Concurrency.MainActor(unsafe) public func makeToastActivity(_ point: CoreGraphics.CGPoint)
+  @_Concurrency.MainActor(unsafe) public func hideToastActivity()
+  @_Concurrency.MainActor(unsafe) public func toastViewForMessage(_ message: Swift.String?, title: Swift.String?, image: UIKit.UIImage?, style: Easebuzz.ToastStyle) throws -> UIKit.UIView
 }
 public struct ToastStyle {
   public init()
@@ -1288,10 +1288,9 @@ public enum ToastPosition {
   public func isValidProductInfo() -> Foundation.NSDictionary
   public func isValidEmail() -> (validity: Swift.Bool, error: Swift.String)
   public func isValidEmail() -> Foundation.NSDictionary
-  @objc override dynamic public init()
   @objc deinit
 }
-extension UInt64 {
+extension Swift.UInt64 {
   @_specialize(exported: false, kind: full, where T == Swift.ArraySlice<Swift.UInt8>)
   @inlinable internal init<T>(bytes: T, fromIndex index: T.Index) where T : Swift.Collection, T.Element == Swift.UInt8, T.Index == Swift.Int {
     if bytes.isEmpty {
@@ -1328,18 +1327,18 @@ public class CBCMAC : Easebuzz.Authenticator {
 }
 public protocol Updatable {
   mutating func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool) throws -> Swift.Array<Swift.UInt8>
-  mutating func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool, output: (Swift.Array<Swift.UInt8>) -> Swift.Void) throws
+  mutating func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool, output: (_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Void) throws
 }
-extension Updatable {
-  public mutating func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool = false, output: (Swift.Array<Swift.UInt8>) -> Swift.Void) throws
+extension Easebuzz.Updatable {
+  public mutating func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool = false, output: (_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Void) throws
   public mutating func update(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, isLast: Swift.Bool = false) throws -> Swift.Array<Swift.UInt8>
   public mutating func update(withBytes bytes: Swift.Array<Swift.UInt8>, isLast: Swift.Bool = false) throws -> Swift.Array<Swift.UInt8>
-  public mutating func update(withBytes bytes: Swift.Array<Swift.UInt8>, isLast: Swift.Bool = false, output: (Swift.Array<Swift.UInt8>) -> Swift.Void) throws
+  public mutating func update(withBytes bytes: Swift.Array<Swift.UInt8>, isLast: Swift.Bool = false, output: (_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Void) throws
   public mutating func finish(withBytes bytes: Swift.ArraySlice<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
   public mutating func finish(withBytes bytes: Swift.Array<Swift.UInt8>) throws -> Swift.Array<Swift.UInt8>
   public mutating func finish() throws -> Swift.Array<Swift.UInt8>
-  public mutating func finish(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, output: (Swift.Array<Swift.UInt8>) -> Swift.Void) throws
-  public mutating func finish(withBytes bytes: Swift.Array<Swift.UInt8>, output: (Swift.Array<Swift.UInt8>) -> Swift.Void) throws
+  public mutating func finish(withBytes bytes: Swift.ArraySlice<Swift.UInt8>, output: (_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Void) throws
+  public mutating func finish(withBytes bytes: Swift.Array<Swift.UInt8>, output: (_ bytes: Swift.Array<Swift.UInt8>) -> Swift.Void) throws
   public mutating func finish(output: (Swift.Array<Swift.UInt8>) -> Swift.Void) throws
 }
 @available(*, renamed: "Digest")
